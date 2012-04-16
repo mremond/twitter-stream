@@ -105,6 +105,14 @@ module Twitter
       close_connection
     end
 
+    # Allows to reconnect after configuration changes
+    # Useful to deal with content/track changes
+    def reconnect_with_updated_config(delay = 1)
+      yield @options
+      stop
+      reconnect_after(delay)
+    end
+
     def unbind
       if @state == :stream && !@buffer.empty?
         parse_stream_line(@buffer.flush)
